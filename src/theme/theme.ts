@@ -1,5 +1,7 @@
-import { getColor, majorScale, minorScale, createGradient } from './utils'
 import tinycolor from 'tinycolor2'
+import { createGradient } from './utils'
+import { ResponsiveValue, Theme as StyledTheme, getPx } from 'styled-system'
+import { ReactText } from 'react'
 
 /**
  * LIGHT
@@ -19,12 +21,12 @@ const light = {
     background: 'rgb(255,255,255)',
     gray: 'rgb(142,142,147)',
     grays: [
+      'rgb(44,44,46)',
+      'rgb(72,72,74)',
       'rgb(142,142,147)',
       'rgb(174,174,178)',
-      'rgb(199,199,204)',
-      'rgb(209,209,214)',
-      'rgb(229,229,234)',
-      'rgb(242,242,247)',
+      'rgb(210,210,214)',
+      'rgb(235,235,240)',
     ],
   },
   tints: {
@@ -111,11 +113,29 @@ const dark = {
 
 export type ThemeColor = 'blue' | 'red' | 'purple' | 'gray' | 'orange' | 'yellow' | 'teal' | 'green'
 export type ColorMode = 'dark' | 'light'
-type ThemeColors = Record<ThemeColor, string> & { grays: string[]; base?: string; default?: string }
-type ThemeGradients = Record<ThemeColor, string[]> & { default?: string[] }
-type ThemeTints = Omit<Record<ThemeColor, string>, 'gray'> & { default?: string[] }
+export type ThemeColors = Record<ThemeColor, ResponsiveValue<string>> & {
+  grays: ResponsiveValue<string[]>
+  base?: ResponsiveValue<string>
+  default?: ResponsiveValue<string>
+  warning?: ResponsiveValue<string>
+  success?: ResponsiveValue<string>
+  danger?: ResponsiveValue<string>
+}
+export type ThemeGradients = Record<ThemeColor, [string, string]> & {
+  default?: [string, string]
+  warning?: [string, string]
+  success?: [string, string]
+  danger?: [string, string]
+}
+export type ThemeTints = Omit<Record<ThemeColor, string>, 'gray'> & { default?: string[] }
+export type Intent = 'default' | 'warning' | 'success' | 'danger'
 
-export class Theme {
+interface ThemeConstructor {
+  mode?: ColorMode
+  color?: ThemeColor
+}
+
+export class Theme implements StyledTheme {
   mode: ColorMode = 'light'
   color: ThemeColor = 'blue'
 
@@ -124,12 +144,19 @@ export class Theme {
     dark,
   }
 
+  private scale = Array.from({ length: 250 }, (v, k) => k * 8)
+
+  safeLoop = (items: ResponsiveValue<any>, callback: (item: ResponsiveValue<any>) => any) =>
+    Array.isArray(items) ? items.map(item => callback(item)) : callback(items)
+
   colors: ThemeColors = this.modes[this.mode].colors
-  gradients: ThemeGradients = this.modes[this.mode].gradients
+  gradients: ThemeGradients = this.modes[this.mode].gradients as ThemeGradients
   tints: ThemeTints = this.modes[this.mode].tints
   shadows = this.modes[this.mode].shadows
+  intents = ['default', 'warning', 'success', 'danger']
 
-  space = Array.from({ length: 100 }, (v, k) => k * 8)
+  space = this.scale
+  sizes = this.scale
 
   fontSizes = [10, 12, 14, 16, 20, 24]
 
@@ -145,35 +172,70 @@ export class Theme {
     mono: `"SF Mono", "Monaco", "Inconsolata", "Fira Mono", "Droid Sans Mono", "Source Code Pro", monospace`,
   }
 
-  constructor(mode: ColorMode = 'light', color: ThemeColor = 'blue') {
-    this.mode = mode
-    this.color = color
+  constructor(options?: ThemeConstructor) {
+    this.mode = options?.mode ?? 'light'
+    this.color = options?.color ?? 'blue'
 
     this.colors = this.modes[this.mode].colors
-    this.colors.base = this.colors[color]
-    this.colors.default = this.colors[color]
+    this.colors.base = this.colors[this.color]
+    this.colors.default = this.colors[this.color]
+    this.colors.warning = this.gradients.orange[0]
+    this.colors.success = this.gradients.green[0]
+    this.colors.danger = this.gradients.red[0]
 
-    this.gradients = this.modes[this.mode].gradients
-    this.gradients.default = this.gradients[this.color]
-
+    this.gradients = this.modes[this.mode].gradients as ThemeGradients
+    this.gradients.default = this.gradients[this.color] as [string, string]
+    this.gradients.warning = this.gradients.orange as [string, string]
+    this.gradients.success = this.gradients.green as [string, string]
+    this.gradients.danger = this.gradients.red as [string, string]
     this.tints = this.modes[this.mode].tints
     this.tints.default = this.tints[this.color]
 
     this.shadows = this.modes[this.mode].shadows
   }
 
-  public getColorAlpha = (alpha = 0.4, color = this.colors.base) => {
-    return tinycolor(color)
-      .setAlpha(alpha)
-      .toString()
+  /**
+   * Utility function that takes a color and returns it with an alpha channel.
+   * Sensible defaults are preset
+   *
+   * @param alpha - default 0.4
+   * @param color - default Theme.colors.base
+   * @since 1.0
+   */
+  public getColorAlpha = ({ alpha = 0.4, color = this.colors.base }) => {
+    return this.safeLoop(color, color =>
+      tinycolor(color)
+        .setAlpha(alpha)
+        .toString(),
+    )
+  }
+
+  public getTextColor = (intent: Intent = 'default') => {
+    return this.colors[intent]
   }
 
   createGradient = createGradient
-  public majorScale = (x: number) => x * 8
-  public minorScale = (x: number) => x * 4
 
-  public getTextSizeForControlHeight = (height: number) => {
+  /**
+   * Utility function that applies theme's major scale against a number
+   * @returns x * 8
+   * @since 1.0
+   */
+  public majorScale = (x: number) => this.safeLoop(x, x => x * 8)
+  /**
+   * Utility function that applies theme's minor scale against a number
+   * @returns x * 4
+   * @since 1.0
+   */
+  public minorScale = (x: number) => this.safeLoop(x, x => x * 4)
+
+  /**
+   * Utility function that returns a control height appropriate for the given control height
+   * @since 1.0
+   */
+  public getTextSizeForControlHeight = (height?: number): ResponsiveValue<ReactText> => {
     if (height) {
+      height = this.majorScale(height)
       if (height <= 24) return this.fontSizes[1]
       if (height <= 28) return this.fontSizes[1]
       if (height <= 32) return this.fontSizes[1]
@@ -181,8 +243,20 @@ export class Theme {
       if (height <= 40) return this.fontSizes[2]
       if (height <= 48) return this.fontSizes[3]
       if (height <= 56) return this.fontSizes[5]
+      return this.fontSizes[5]
     }
+    return this.fontSizes[2]
+  }
 
-    return this.fontSizes[5]
+  public getIconSizeForButton = (height?: number): string => {
+    if (height) {
+      height = this.majorScale(height)
+      if (height <= 28) return `${this.fontSizes[1]}px`
+      if (height <= 32) return `${this.fontSizes[1]}px`
+      if (height <= 48) return `${this.fontSizes[2]}px`
+      if (height <= 40) return `${this.fontSizes[3]}px`
+      return `${this.fontSizes[3]}px`
+    }
+    return `${this.fontSizes[1]}px`
   }
 }

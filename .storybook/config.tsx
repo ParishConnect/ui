@@ -11,10 +11,13 @@ addDecorator(
       params: [
         {
           name: 'Light',
-          props: { theme: new Theme('light') },
+          props: { theme: new Theme({ mode: 'light' }) },
           default: true,
         },
-        { name: 'Dark', props: { theme: new Theme('dark') } },
+        {
+          name: 'Dark',
+          props: { theme: new Theme({ mode: 'dark' }) },
+        },
       ],
     },
   ]),

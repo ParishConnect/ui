@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Theme } from '.'
 import { Global } from '@emotion/core'
-import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming'
+import { ThemeProvider as EmotionThemeProvider } from '@emotion/core'
 import css from '@styled-system/css'
 
 export const ThemeProvider: FC<{ theme: Theme }> = ({ theme, children }) => {
@@ -9,7 +9,7 @@ export const ThemeProvider: FC<{ theme: Theme }> = ({ theme, children }) => {
     <EmotionThemeProvider theme={theme}>
       <Global
         styles={css({
-          html: {
+          ':root': {
             fontFamily: 'ui',
             color: 'text',
             backgroundColor: 'background',

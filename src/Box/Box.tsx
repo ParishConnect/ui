@@ -1,4 +1,5 @@
-import styled, { StyledTags } from '@emotion/styled'
+import styled, { StyledTags, CSSObject } from '@emotion/styled'
+import shouldForwardProp from '@styled-system/should-forward-prop'
 import {
   background,
   BackgroundProps,
@@ -6,30 +7,32 @@ import {
   BorderProps,
   color,
   ColorProps,
+  compose,
   flexbox,
   FlexboxProps,
   grid,
   GridProps,
-  layout,
   LayoutProps,
   position,
   PositionProps,
   shadow,
   ShadowProps,
-  space,
   SpaceProps,
   typography,
   TypographyProps,
+  space,
+  layout,
 } from 'styled-system'
-import { ThemeColor, Theme } from '../theme'
+import { Theme, ThemeColor } from '../theme'
 import { gradient, tint } from '../theme/systems'
 import { LiteralStringUnion } from '../utils/types'
-import shouldForwardProp from '@styled-system/should-forward-prop'
 
 export type BoxProps = {
   gradient?: LiteralStringUnion<ThemeColor> | boolean
   tint?: LiteralStringUnion<ThemeColor> | boolean
   as?: keyof StyledTags<Theme>
+  theme?: Theme
+  css?: CSSObject
   [key: string]: any
 } & ColorProps &
   SpaceProps &
@@ -42,21 +45,26 @@ export type BoxProps = {
   PositionProps &
   ShadowProps
 
-export const Box = styled<'div', BoxProps>('div', { shouldForwardProp })(
+export const Box = styled('div', { shouldForwardProp })<BoxProps>(
   {
     boxSizing: 'border-box',
     minWidth: 0,
+    margin: 0,
   },
-  space,
-  color,
-  layout,
-  typography,
-  flexbox,
-  grid,
-  background,
-  border,
-  position,
-  shadow,
-  gradient,
-  tint,
+  compose(
+    space,
+    color,
+    layout,
+    typography,
+    flexbox,
+    grid,
+    background,
+    border,
+    position,
+    shadow,
+    gradient,
+    tint,
+  ),
+  // Allow overrides in css prop
+  props => props.css,
 )

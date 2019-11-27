@@ -1,14 +1,14 @@
-import styled, { StyledComponent, CreateStyledComponentBase, StyledTags } from '@emotion/styled'
-import { ResponsiveValue, variant } from 'styled-system'
+import styled from '@emotion/styled'
+import shouldForwardProp from '@styled-system/should-forward-prop'
+import { variant } from 'styled-system'
 import { Box, BoxProps } from '../Box'
-import { Theme } from '../theme'
+import { LiteralNumberUnion } from '../utils/types'
 
 export type TextProps = BoxProps & {
-  level?: ResponsiveValue<200 | 300 | 400 | 500 | 600>
+  level?: LiteralNumberUnion<200 | 300 | 400 | 500 | 600>
 }
 
-// TODO: Fix with update types from emotion
-export const Text = styled<'span', TextProps>(Box)(
+export const Text = styled(Box, { label: 'Text', shouldForwardProp })<TextProps>(
   ({ as }) => as === 'strong' && { '&': { fontWeight: 600 } },
   variant({
     prop: 'level',

@@ -1,9 +1,9 @@
-import { ThemeProvider } from 'emotion-theming'
+import { ThemeProvider } from '@emotion/core'
 import React, { ReactNode } from 'react'
-import theme from '../theme'
+import { Theme } from '../theme'
 
 const ThemeDecorator = (storyFn: () => ReactNode) => (
-  <ThemeProvider theme={theme}>{storyFn()}</ThemeProvider>
+  <ThemeProvider theme={new Theme()}>{storyFn()}</ThemeProvider>
 )
 
 export default ThemeDecorator
