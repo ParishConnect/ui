@@ -1,15 +1,38 @@
 import styled from '@emotion/styled'
-import React from 'react'
-import { variant } from 'styled-system'
-import { BoxProps } from '../Box'
+import React, { ReactNode } from 'react'
+import { variant, ResponsiveValue } from 'styled-system'
+import { Box } from '../Box'
 import { Text } from '../Text/Text'
-import { Theme, useTheme } from '../theme'
+import { Theme } from '../theme'
+import { Spinner } from '../Spinner'
+import { Intent, ControlAppearance } from '../theme/theme'
+import { useTheme } from '@emotion/core'
 
-export type ButtonProps = BoxProps & {
-  appearance?: 'primary' | 'default' | 'minimal' | 'overlay'
-  iconBefore?: any
-  iconAfter?: any
-  intent?: string
+export type ButtonProps = Box & {
+  appearance?: ControlAppearance
+  /**
+   * Adds an icon before the `Button` content
+   * @since 1.0
+   */
+  iconBefore?: ReactNode
+  /**
+   * Adds an icon after the `Button` content
+   * @since 1.0
+   */
+  iconAfter?: ReactNode
+  /**
+   * Button content becomes this icon only.
+   * If you want text, use `iconBefore` or `iconAfter`
+   * @since 1.0
+   */
+  icon?: ReactNode
+  intent?: Intent
+  /**
+   * Disables button and adds a spinner as iconBefore
+   * @since 1.0
+   */
+  loading?: boolean
+  iconSize?: ResponsiveValue<number | string>
 }
 
 const ButtonFactory = styled(Text)<ButtonProps>(
@@ -24,9 +47,11 @@ const ButtonFactory = styled(Text)<ButtonProps>(
     '&::-moz-focus-inner ': {
       border: 0,
     },
+    fontSize: props.fontSize as any,
     fontWeight: 500,
     lineHeight: 0,
-    transition: 'transform 225ms',
+    transitionDuration: '225ms',
+    transitionProperty: 'transform, background-color',
     '&:active': {
       transform: 'scale(0.98)',
     },
@@ -38,7 +63,7 @@ const ButtonFactory = styled(Text)<ButtonProps>(
       variants: {
         primary: {
           color: 'white',
-          backgroundColor: 'blue',
+          backgroundColor: 'default',
           backgroundImage: (t: Theme) =>
             t.createGradient(...(t.gradients[intent] as [string, string])),
           boxShadow: (t: Theme) =>
@@ -67,13 +92,10 @@ const ButtonFactory = styled(Text)<ButtonProps>(
           color: (t: Theme) => t.colors[intent],
           background: 'transparent',
           '&:hover': {
-            backgroundColor: (t: Theme) => t.colors.grays[4],
+            backgroundColor: 'grays.5',
           },
           '&:active, &:focus': {
             boxShadow: (t: Theme) => `0 0 0 2px ${t.getColorAlpha({ color: t.colors[intent] })}`,
-          },
-          '&:active': {
-            backgroundColor: (t: Theme) => t.colors.grays[3],
           },
         },
         overlay: {
@@ -90,9 +112,9 @@ const ButtonFactory = styled(Text)<ButtonProps>(
         },
         default: {
           color: (t: Theme) => t.colors[intent],
-          backgroundColor: (t: Theme) => t.colors.grays[5],
+          backgroundColor: 'grays.5',
           '&:hover': {
-            backgroundColor: (t: Theme) => t.colors.grays[4],
+            backgroundColor: (t: Theme) => t.tints[intent],
           },
           '&:focus': {
             boxShadow: (t: Theme) => `0 0 0 2px ${t.getColorAlpha({ color: t.colors[intent] })}`,
@@ -108,38 +130,88 @@ const ButtonFactory = styled(Text)<ButtonProps>(
       },
     },
   }),
+  variant({
+    prop: 'disabled',
+    variants: {
+      true: {
+        color: 'gray',
+        cursor: 'not-allowed',
+        backgroundColor: 'grays.4',
+        '&:hover': {
+          backgroundColor: 'grays.4',
+        },
+        '&:focus': {
+          boxShadow: (t: Theme) => `0 0 0 2px ${t.colors.grays[3]}`,
+        },
+      },
+    },
+  }),
+  variant({
+    prop: 'loading',
+    variants: {
+      true: {
+        '&': {
+          pointerEvents: 'none',
+          color: 'grays.1',
+          backgroundColor: 'grays.5',
+          backgroundImage: 'none',
+          boxShadow: 'none',
+          cursor: 'progress',
+        },
+      },
+    },
+  }),
 )
 
+/**
+ * The `Button` component is the most common button component.
+ * It contains a label and optional icons before or after the label.
+ * @since 1.0
+ * @author Evan Hennessy
+ */
 export function Button({
   children,
   fontSize,
   height,
   iconAfter: IconAfter,
   iconBefore: IconBefore,
+  icon: Icon,
   paddingLeft,
   paddingRight,
+  loading,
+  iconSize: _iconSize,
   ...rest
 }: ButtonProps) {
-  const theme = useTheme()
+  const theme: Theme = useTheme()
 
-  const iconSize = theme.safeLoop(height, h => theme.getIconSizeForButton(h))
+  let iconSize = theme.safeLoop(height, h => theme.getIconSizeForButton(h))
+
+  if (loading) {
+    IconBefore = Spinner
+    iconSize = theme.safeLoop(height, h => theme.getIconSizeForButton(h * 1.5))
+    children = 'Loading'
+  }
+
+  if (Icon) {
+    iconSize = _iconSize || theme.safeLoop(height, h => theme.getIconSizeForButton(h * 1.5))
+  }
 
   const props = {
-    paddingLeft: Math.floor(theme.safeLoop(height, h => h / 2)),
-    paddingRight: Math.floor(theme.safeLoop(height, h => h / 2)),
+    paddingLeft: Icon ? 0 : Math.floor(theme.safeLoop(height, h => h / 2)),
+    paddingRight: Icon ? 0 : Math.floor(theme.safeLoop(height, h => h / 2)),
     ...rest,
     height,
     fontSize: theme.safeLoop(height, h => theme.getTextSizeForControlHeight(h)),
   }
 
   return (
-    <ButtonFactory {...(props as any)}>
+    <ButtonFactory loading={loading} {...(props as any)}>
       {typeof IconBefore === 'function' ? (
         <IconBefore size={iconSize} marginRight={1} />
       ) : (
         IconBefore || null
       )}
-      {children}
+      {Icon ? typeof Icon === 'function' ? <Icon size={iconSize} marginX={1.5} /> : Icon : children}
       {typeof IconAfter === 'function' ? (
         <IconAfter size={iconSize} marginLeft={1} />
       ) : (
@@ -158,6 +230,8 @@ Button.defaultProps = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 0,
+  borderRadius: 6,
   intent: 'default',
+  disabled: false,
+  loading: false,
 }

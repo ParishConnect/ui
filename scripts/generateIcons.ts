@@ -12,10 +12,10 @@ function createSVGObject() {
   return files
     .filter(file => path.extname(file) === '.svg')
     .map(file => {
-      const name = camelCase(path.basename(file, '.svg'), { pascalCase: true })
+      const name = `${camelCase(path.basename(file, '.svg'), { pascalCase: true })}Icon`
       const svg = fs.readFileSync(path.join(__dirname, './icons', file))
       const $ = cheerio.load(svg)
-      $('path').removeAttr('class')
+      $('path, polyline, line').removeAttr('class')
       $('defs, title').remove()
       const contents = minify($('svg').html(), { collapseWhitespace: true })
       return { name, contents }

@@ -1,13 +1,16 @@
-import { Theme as UITheme } from '../theme/theme'
+import { ReactNode } from 'react'
 
 export type LiteralStringUnion<T extends K, K = string> = T | (K & {})
-export type LiteralNumberUnion<T extends K, K = number> = T | (K & {})
-export type LiteralStringNumberUnion<T extends K, K = string | number> = T | (K & {})
+export type ResponsiveLiteralStringUnion<T extends K, K = string> =
+  | (T | (K & {}))
+  | ((K[] & {}[]) | T[])
+export type LiteralNumberUnion<T extends K, K = number> = (T | (K & {})) | (K[] | T[])
+export type LiteralStringNumberUnion<T extends K, K = string | number> =
+  | (T | (K & {}))
+  | (K[] | T[])
+export type LiteralStringBooleanUnion<T extends K, K = string | boolean> =
+  | (T | (K & {}))
+  | (K[] | T[])
+export type LiteralStringReactNodeUnion<T extends K, K = string | ReactNode> = T | (K & {})
 
-export type LayerAppearance = LiteralStringUnion<'gradient' | 'solid' | 'tint'>
-
-declare global {
-  namespace Emotion {
-    export interface Theme extends UITheme {}
-  }
-}
+export type LayerAppearance = ResponsiveLiteralStringUnion<'gradient' | 'solid' | 'tint'>

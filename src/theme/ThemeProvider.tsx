@@ -1,12 +1,12 @@
+import { Global, ThemeProvider as EmotionThemeProvider } from '@emotion/core'
+import css from '@styled-system/css'
 import React, { FC } from 'react'
 import { Theme } from '.'
-import { Global } from '@emotion/core'
-import { ThemeProvider as EmotionThemeProvider } from '@emotion/core'
-import css from '@styled-system/css'
+import { ColorMode } from './theme'
 
-export const ThemeProvider: FC<{ theme: Theme }> = ({ theme, children }) => {
+export const ThemeProvider: FC<{ colorMode: ColorMode }> = ({ colorMode, children }) => {
   return (
-    <EmotionThemeProvider theme={theme}>
+    <EmotionThemeProvider theme={new Theme({ mode: colorMode })}>
       <Global
         styles={css({
           ':root': {

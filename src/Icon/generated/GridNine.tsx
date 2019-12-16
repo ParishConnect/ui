@@ -1,0 +1,60 @@
+import React from 'react'
+import { Icon, IconProps } from '../Icon'
+export function GridNineIcon(props: IconProps) {
+  return (
+    <Icon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <rect
+        x={0.75}
+        y={0.747}
+        width={9}
+        height={9}
+        rx={1.5}
+        ry={1.5}
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+      />
+      <rect
+        x={0.75}
+        y={14.247}
+        width={9}
+        height={9}
+        rx={1.5}
+        ry={1.5}
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+      />
+      <rect
+        x={14.25}
+        y={0.747}
+        width={9}
+        height={9}
+        rx={1.5}
+        ry={1.5}
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+      />
+      <rect
+        x={14.25}
+        y={14.247}
+        width={9}
+        height={9}
+        rx={1.5}
+        ry={1.5}
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+      />
+    </Icon>
+  )
+}

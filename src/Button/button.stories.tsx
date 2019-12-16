@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box } from '../Box'
-import { HouseEntrance } from '../Icon/generated/HouseEntrance'
 import { Strong } from '../Text'
 import { Button } from './Button'
+import { ArrowLeftIcon, ArrowRightIcon, HomeIcon } from '../Icon'
 
 export default {
   title: 'Button',
@@ -35,7 +35,7 @@ const ButtonTypes = (props: any) => (
 
 const ButtonIntents = (props: any) => (
   <Box display="block">
-    {['default', 'warning', 'success', 'danger'].map(intent => (
+    {['info', 'warning', 'success', 'danger'].map(intent => (
       <Button key={intent} {...props} intent={intent}>
         {intent}
       </Button>
@@ -43,30 +43,62 @@ const ButtonIntents = (props: any) => (
   </Box>
 )
 
-export const button = () => {
+const ButtonSizes = (props: any) => (
+  <Box display="block">
+    {[2.5, 3, 4, 5, 6, 7].map(height => (
+      <Button key={height} {...props} height={height}>
+        Height {height}
+      </Button>
+    ))}
+  </Box>
+)
+
+export const All = () => {
   return (
     <Box css={{ textTransform: 'capitalize' }}>
       <Strong level={500} marginBottom={1} display="block">
         Appearances
       </Strong>
-      <ButtonTypes marginRight={1} />
+      <ButtonTypes marginRight={1} my={1} />
       <Strong level={500} marginBottom={1} display="block">
         Rounded
       </Strong>
-      <ButtonTypes marginRight={1} rounded />
+      <ButtonTypes marginRight={1} rounded my={1} />
+      <Strong level={500} marginBottom={1} display="block">
+        Heights
+      </Strong>
+      <ButtonSizes marginRight={1} my={1} />
       <Strong level={500} marginBottom={1} display="block">
         Intents
       </Strong>
-      <ButtonIntents marginRight={1} />
-      <ButtonIntents marginRight={1} appearance="primary" />
-      <ButtonIntents marginRight={1} appearance="minimal" />
+      <ButtonIntents marginRight={1} my={1} />
+      <ButtonIntents marginRight={1} my={1} appearance="primary" />
+      <ButtonIntents marginRight={1} my={1} appearance="minimal" />
       <Strong level={500} marginBottom={1} display="block">
         With Icons
       </Strong>
-      <Button marginRight={1} iconBefore={HouseEntrance}>
+      <Button marginRight={1} iconBefore={ArrowLeftIcon}>
         Icon Before
       </Button>
-      <Button iconAfter={HouseEntrance}>Icon After</Button>
+      <Button my={1} iconAfter={ArrowRightIcon}>
+        Icon After
+      </Button>
+      <Strong level={500} marginBottom={1} display="block">
+        Loading
+      </Strong>
+      <Button my={1} loading>
+        Loading
+      </Button>
+      <Strong level={500} marginBottom={1} display="block">
+        Disabled
+      </Strong>
+      <Button my={1} disabled>
+        Disabled
+      </Button>
+      <Strong level={500} marginBottom={1} display="block">
+        Icon Only
+      </Strong>
+      <Button icon={HomeIcon} my={1} />
     </Box>
   )
 }

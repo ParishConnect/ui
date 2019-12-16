@@ -1,12 +1,16 @@
-import styled, { StyledTags, CSSObject } from '@emotion/styled'
-import shouldForwardProp from '@styled-system/should-forward-prop'
+import { CSSObject } from '@emotion/core'
+import isPropValid from '@emotion/is-prop-valid'
+import styled, { StyledTags } from '@emotion/styled'
+import * as CSS from 'csstype'
+import { isValidMotionProp } from 'framer-motion'
 import {
   background,
   BackgroundProps,
-  border,
-  BorderProps,
+  BorderColorProps,
+  BorderRadiusProps,
+  BorderStyleProps,
+  BorderWidthProps,
   color,
-  ColorProps,
   compose,
   flexbox,
   FlexboxProps,
@@ -15,56 +19,86 @@ import {
   LayoutProps,
   position,
   PositionProps,
+  ResponsiveValue,
   shadow,
   ShadowProps,
   SpaceProps,
+  TLengthStyledSystem,
   typography,
   TypographyProps,
-  space,
-  layout,
+  ColorProps,
 } from 'styled-system'
-import { Theme, ThemeColor } from '../theme'
-import { gradient, tint } from '../theme/systems'
-import { LiteralStringUnion } from '../utils/types'
+import { css, Theme, ThemeColor } from '../theme'
+import { border, gradient, layout, space, tint } from '../theme/systems'
+import componentProps from '../utils/componentProps'
+import { LiteralStringReactNodeUnion, ResponsiveLiteralStringUnion } from '../utils/types'
+import { HTMLAttributes, DetailedHTMLProps } from 'react'
 
-export type BoxProps = {
-  gradient?: LiteralStringUnion<ThemeColor> | boolean
-  tint?: LiteralStringUnion<ThemeColor> | boolean
-  as?: keyof StyledTags<Theme>
+interface BorderProps<TLength = TLengthStyledSystem>
+  extends BorderWidthProps,
+    BorderStyleProps,
+    BorderColorProps,
+    BorderRadiusProps {
+  borderTop?: ResponsiveValue<CSS.BorderTopProperty<TLength> | boolean>
+  borderRight?: ResponsiveValue<CSS.BorderTopProperty<TLength> | boolean>
+  borderBottom?: ResponsiveValue<CSS.BorderTopProperty<TLength> | boolean>
+  borderLeft?: ResponsiveValue<CSS.BorderTopProperty<TLength> | boolean>
+  border?: ResponsiveValue<CSS.BorderProperty<TLength> | boolean>
+  borderX?: ResponsiveValue<CSS.BorderProperty<TLength>>
+  borderY?: ResponsiveValue<CSS.BorderProperty<TLength>>
+}
+
+export type Box<T = HTMLDivElement> = HTMLAttributes<T> & {
+  gradient?: ResponsiveLiteralStringUnion<ThemeColor> | boolean
+  tint?: ResponsiveLiteralStringUnion<ThemeColor> | boolean
+  as?: LiteralStringReactNodeUnion<keyof StyledTags>
   theme?: Theme
-  css?: CSSObject
+  css?: any
+  ref?: React.RefObject<HTMLDivElement>
   [key: string]: any
-} & ColorProps &
-  SpaceProps &
-  LayoutProps &
+} & DetailedHTMLProps<HTMLAttributes<T>, T> &
+  ColorProps &
   TypographyProps &
+  LayoutProps &
+  SpaceProps &
   FlexboxProps &
   GridProps &
   BackgroundProps &
-  BorderProps &
   PositionProps &
-  ShadowProps
+  ShadowProps &
+  BorderProps
 
-export const Box = styled('div', { shouldForwardProp })<BoxProps>(
+const styledProps = compose(
+  space,
+  color,
+  layout,
+  typography,
+  flexbox,
+  grid,
+  background,
+  border,
+  position,
+  shadow,
+  gradient,
+  tint,
+)
+
+/**
+ * The `Box` components provides the foundation for all of the components in this UI Kit
+ * @since 1.0
+ * @author Evan Hennessy
+ */
+export const Box = styled('div', {
+  shouldForwardProp: (prop: string) =>
+    isValidMotionProp(prop) ||
+    (isPropValid(prop) && !styledProps.propNames.includes(prop) && !componentProps.includes(prop)),
+})<Box>(
   {
     boxSizing: 'border-box',
     minWidth: 0,
     margin: 0,
   },
-  compose(
-    space,
-    color,
-    layout,
-    typography,
-    flexbox,
-    grid,
-    background,
-    border,
-    position,
-    shadow,
-    gradient,
-    tint,
-  ),
+  styledProps,
   // Allow overrides in css prop
-  props => props.css,
+  (props: Box) => css(props.css as CSSObject),
 )

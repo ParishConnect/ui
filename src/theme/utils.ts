@@ -18,13 +18,3 @@ export function getColor(this: Theme, color: string) {
 export function createGradient(start: string, end: string, angle = -57) {
   return `linear-gradient(${angle}deg, ${start}, ${end})`
 }
-
-/** Helper function that scales the number by 8 */
-export function majorScale(this: Theme, number: number): number {
-  return Math.floor(number * 8)
-}
-
-/** Helper function that scales the number by 4 */
-export function minorScale(this: Theme, number: number): number {
-  return Math.floor(number * 4)
-}

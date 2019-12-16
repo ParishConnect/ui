@@ -1,6 +1,4 @@
 export * from './Box/Box'
-export * from './utils/Global'
 export * from './utils/types'
 export * from './utils/useMedia'
-export { default as themeDecorator } from './utils/themeDecorator'
-export { Theme, ThemeColor, ThemeProvider, themeContext, useTheme } from './theme'
+export * from './theme'

@@ -1,4 +1,5 @@
 import { compose, system } from '@styled-system/core'
+import { majorScale } from './utils'
 
 const defaults = {
   major: 8,
@@ -10,6 +11,7 @@ type Config = {
       property?: string
       properties?: string[]
       scale: string
+      transform: (n: any, scale: number) => any
       defaultScale: any
     }
   }
@@ -20,36 +22,43 @@ configs.margin = {
   margin: {
     property: 'margin',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginTop: {
     property: 'marginTop',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginRight: {
     property: 'marginRight',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginBottom: {
     property: 'marginBottom',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginLeft: {
     property: 'marginLeft',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginX: {
     properties: ['marginLeft', 'marginRight'],
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   marginY: {
     properties: ['marginTop', 'marginBottom'],
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
 }
@@ -65,36 +74,43 @@ configs.padding = {
   padding: {
     property: 'padding',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingTop: {
     property: 'paddingTop',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingRight: {
     property: 'paddingRight',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingBottom: {
     property: 'paddingBottom',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingLeft: {
     property: 'paddingLeft',
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingX: {
     properties: ['paddingLeft', 'paddingRight'],
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
   paddingY: {
     properties: ['paddingTop', 'paddingBottom'],
     scale: 'major',
+    transform: majorScale,
     defaultScale: defaults.major,
   },
 }

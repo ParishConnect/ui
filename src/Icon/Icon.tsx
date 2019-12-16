@@ -1,7 +1,7 @@
 import React from 'react'
-import { Box, BoxProps } from '../Box'
+import { Box } from '../Box'
 
-export type IconProps = BoxProps & {
+export type IconProps = Box & {
   name?: string
 }
 
@@ -17,4 +17,5 @@ export function Icon({ name, children, ...rest }: IconProps) {
 Icon.defaultProps = {
   size: 2,
   fill: 'currentColor',
+  strokeColor: 'currentColor',
 }
