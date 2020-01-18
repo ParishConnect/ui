@@ -84,12 +84,17 @@ export const overflowingContent = () => {
 
 export const preventBodyScrolling = () => {
   const [preventScrolling, setPreventScrolling] = useState(false)
+  const [isShown, setShown] = useState(true)
   return (
     <Box m={3}>
       <Box paddingY="70vh">This will check body scrolling</Box>
       <Dialog
         title="Dialog Title"
-        isShown={true}
+        isShown={isShown}
+        onCancel={() => {
+          setShown(false)
+          setPreventScrolling(false)
+        }}
         hasFooter={false}
         preventBodyScroll={preventScrolling}
       >

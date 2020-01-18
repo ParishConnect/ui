@@ -3,6 +3,7 @@ import isPropValid from '@emotion/is-prop-valid'
 import styled, { StyledTags } from '@emotion/styled'
 import * as CSS from 'csstype'
 import { isValidMotionProp } from 'framer-motion'
+import { DetailedHTMLProps, HTMLAttributes } from 'react'
 import {
   background,
   BackgroundProps,
@@ -11,6 +12,7 @@ import {
   BorderStyleProps,
   BorderWidthProps,
   color,
+  ColorProps,
   compose,
   flexbox,
   FlexboxProps,
@@ -26,13 +28,11 @@ import {
   TLengthStyledSystem,
   typography,
   TypographyProps,
-  ColorProps,
 } from 'styled-system'
 import { css, Theme, ThemeColor } from '../theme'
 import { border, gradient, layout, space, tint } from '../theme/systems'
 import componentProps from '../utils/componentProps'
 import { LiteralStringReactNodeUnion, ResponsiveLiteralStringUnion } from '../utils/types'
-import { HTMLAttributes, DetailedHTMLProps } from 'react'
 
 interface BorderProps<TLength = TLengthStyledSystem>
   extends BorderWidthProps,

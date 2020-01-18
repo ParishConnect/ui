@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/core'
-import { motion } from 'framer-motion'
+import { motion, PanInfo } from 'framer-motion'
 import React from 'react'
 import { ResponsiveValue } from 'styled-system'
 import { Box, Card, Pane } from '../Box'
@@ -83,6 +83,13 @@ export function Dialog({
     >
       {close => (
         <Card
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          onDragEnd={(_: PointerEvent, info: PanInfo) => {
+            if (info.velocity.y > 50) {
+              close()
+            }
+          }}
           as={motion.div}
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: 50, opacity: 0 }}
@@ -101,12 +108,11 @@ export function Dialog({
           alignSelf={['flex-end', 'initial']}
           maxHeight={maxHeight}
           marginTop={topOffset}
+          marginBottom={[1, 0]}
           marginX={[0, sideOffsetMargin]}
           width={width}
           zIndex="inherit"
           borderRadius={10}
-          borderBottomLeftRadius={[0, 10]}
-          borderBottomRightRadius={[0, 10]}
           {...containerProps}
         >
           {hasHeader && (
@@ -150,8 +156,8 @@ export function Dialog({
             </Box>
           </Box>
           {hasFooter && (
-            <Pane borderTop="muted" display="flex">
-              <Pane padding={2} marginLeft="auto">
+            <Pane borderTop="muted">
+              <Pane padding={2} textAlign="right">
                 {/* Cancel should be first to make sure focus gets on it first. */}
                 {hasCancel && (
                   <Button autoFocus tabIndex={0} onClick={() => onCancel(close)}>

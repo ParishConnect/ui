@@ -317,7 +317,7 @@ export class Theme implements StyledTheme {
     return `${this.fontSizes[1]}px`
   }
 
-  public getTextColorForBackground = (background: ThemeColors) => {
+  public getTextColorForBackground = (background: ThemeColors | ThemeTints) => {
     return c(background).isLight()
       ? c(background)
           .darken(0.65)

@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/core'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import { ToggleLayer, useHover } from 'react-laag'
 import { AnchorEnum } from 'react-laag/dist/ToggleLayer/types'
 import ResizeObserver from 'resize-observer-polyfill'

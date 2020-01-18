@@ -1,9 +1,7 @@
-import { useTheme } from '@emotion/core'
-import React from 'react'
-import { Text } from '../Text'
 import styled from '@emotion/styled'
 import css from '@styled-system/css'
 import { variant } from 'styled-system'
+import { Text } from '../Text'
 
 export type TextInput = Text & {
   /**
@@ -40,6 +38,7 @@ export const TextInput = styled(Text)<TextInput>(
       WebkitAppearance: 'none',
       MozAppearance: 'none',
       border: 'none',
+      boxShadow: `0 0 0 1px ${theme.colors.grays[4]}`,
       fontSize: theme.safeLoop(props.height, height => theme.getTextSizeForControlHeight(height)),
       borderRadius: theme.safeLoop(props.height, height =>
         theme.getBorderRadiusForControlHeight(height),
