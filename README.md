@@ -1,4 +1,4 @@
-![ParishKit Logo](/.storybook/public/ParishKitLogo.svg?raw=true&sanitize=true 'ParishKit')
+<img width="300" src="/.storybook/public/ParishKitLogo.svg?raw=true&sanitize=true" title="ParishKit" alt="logo" />
 
 ## Installation
 
