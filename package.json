@@ -28,6 +28,7 @@
     "@storybook/addon-viewport": "^5.3.6",
     "@storybook/addons": "^5.3.6",
     "@storybook/react": "^5.3.6",
+    "@storybook/storybook-deployer": "^2.8.6",
     "@storybook/theming": "^5.3.6",
     "@svgr/cli": "^5.0.1",
     "@types/babel__core": "^7.1.3",
