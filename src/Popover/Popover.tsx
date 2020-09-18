@@ -1,16 +1,15 @@
 import { useTheme } from '@emotion/core'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { ReactNode, useEffect } from 'react'
-import { ToggleLayer, useHover } from 'react-laag'
+import React, { ReactNode } from 'react'
+import { ToggleLayer } from 'react-laag'
 import { AnchorEnum } from 'react-laag/dist/ToggleLayer/types'
 import ResizeObserver from 'resize-observer-polyfill'
-import { Box, Pane, Card } from '../Box'
+import { Box, Card } from '../Box'
 import { Portal } from '../LayoutComponents/Portal'
 import { Stack } from '../LayoutComponents/Stack'
 import { Paragraph } from '../Text'
-import { useFocusInside } from '../utils/useFocusInside'
 
-export type PopoverProps = Box & {
+export type PopoverProps = Omit<Box, 'position'> & {
   content: ((props: { close: () => void; isOpen: boolean }) => ReactNode) | ReactNode
   position?: AnchorEnum
   children:

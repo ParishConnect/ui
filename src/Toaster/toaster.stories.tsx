@@ -26,7 +26,7 @@ const ToasterStory = () => {
         onClick={() =>
           add({
             title: 'Some information',
-            description: 'ParishConnect is the first all-in-one Digital Catholic Platform.',
+            description: 'ParishConnect is the most advanced Digital Catholic Platform.',
           })
         }
       >
