@@ -14,7 +14,7 @@ addDecorator(
           props: { colorMode: 'light' },
           default: true,
         },
-        ...['purple', 'orange', 'teal', 'green'].map(color => ({
+        ...['red', 'purple', 'orange', 'teal', 'green'].map(color => ({
           name: `Light ${color}`,
           props: { colorMode: 'light', color },
         })),
@@ -22,7 +22,7 @@ addDecorator(
           name: 'Dark',
           props: { colorMode: 'dark' },
         },
-        ...['purple', 'orange', 'teal', 'green'].map(color => ({
+        ...['red', 'purple', 'orange', 'teal', 'green'].map(color => ({
           name: `Dark ${color}`,
           props: { colorMode: 'dark', color },
         })),
