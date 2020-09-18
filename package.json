@@ -10,6 +10,7 @@
   "scripts": {
     "start": "start-storybook --ci -p 6006 -s .storybook/public",
     "build-storybook": "build-storybook",
+    "deploy": "storybook-to-ghpages",
     "generate:icons": "svgr -d src/Icon/generated scripts/icons --ext=\"tsx\"",
     "postinstall": "typesync"
   },
