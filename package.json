@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "repository": "https://github.com/parishconnect/app/tree/master/packages/ui",
   "author": "ParishConnect",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "start-storybook --ci -p 6006 -s .storybook/public",
